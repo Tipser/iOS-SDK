@@ -24,7 +24,7 @@ public class TipserSDK {
         self.posId = posId;
     }
     
-    public func addProduct(productId: String){
+    public func addProduct(productId: String, onComplete : @escaping ()->Void ){
         if (self.isAddingProduct){
             return
         }
@@ -46,8 +46,10 @@ public class TipserSDK {
             doRequestToTipser(uri: uri, parameters: parameters, tipserToken: tipserToken, method: "POST", onComplete: { data in
                 self.isAddingProduct = false
                 self.getTipserWebpage().needRefresh = true;
+                onComplete()
             }, onError: {
                 self.isAddingProduct = false
+                onComplete()
             })
         }
     }

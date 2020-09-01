@@ -10,20 +10,27 @@ import SwiftUI
 import TipserSDK
 
 struct ContentView: View{
+    @State private var addingProduct = false
+    
     var body: some View {    
         return NavigationView{
             VStack(){
                 Button(action: {
-                    tipserSDK.addProduct(productId: "5da5c5249af3ba00010b84fc")
+                    self.addingProduct = true;
+                    tipserSDK.addProduct(productId: "55a65f4878415534087b3903") { () in
+                        print("UI - Product added!")
+                        self.addingProduct = false;
+                    }
                 }) {
                     Text("Add Product")
                         .font(.largeTitle)
                 }
                 .padding(.vertical)
+                .disabled(addingProduct)
                 NavigationLink(destination: CheckoutView()) {
                     Text("Checkout")
                     .font(.largeTitle)
-                }.padding(.vertical)
+                }.padding(.vertical).disabled(addingProduct)
             }
         }
     }

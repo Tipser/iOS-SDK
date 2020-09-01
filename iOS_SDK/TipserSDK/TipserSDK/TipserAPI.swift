@@ -50,11 +50,11 @@ func doRequestToTipser(uri : String , parameters: [String: Any]?, tipserToken: S
             if let response = response as? HTTPURLResponse {
                 print("statusCode: \(response.statusCode)")
             }
-            if let onComplete = onComplete{
-                onComplete(data)
-            }
             if let data = data, let dataString = String(data: data, encoding: .utf8) {
                 print("data: \(dataString)")
+            }
+            if let onComplete = onComplete{
+                onComplete(data)
             }
         }
     }
