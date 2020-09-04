@@ -9,6 +9,7 @@ public class TipserSDK {
     var tipserTokenCache : String?
     var tipserEnv: TipserEnv;
     var tipserApi: TipserApi;
+    public var checkoutNeedsRefresh: Bool = false;
     
     public init(tipserEnv: TipserEnv = TipserEnv.prod) {
         self.tipserEnv = tipserEnv
@@ -41,7 +42,7 @@ public class TipserSDK {
             }
             self.tipserApi.addProduct(posId: self.posId, productId: productId, tipserToken: tipserToken!, onComplete: {
                 self.isAddingProduct = false
-                self.getTipserWebpage().needRefresh = true;
+                self.checkoutNeedsRefresh = true;
                 onComplete()
             }, onError: {
                 self.isAddingProduct = false

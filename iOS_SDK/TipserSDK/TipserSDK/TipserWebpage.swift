@@ -19,7 +19,6 @@ class TipserWebpage {
     let webView : WKWebView
     let tipserTokenName : String = "tipserToken"
     let tipserTokenAnonymousFlagName : String = "tipserTokenAnonymous"
-    var needRefresh = false
     var tipserEnv : TipserEnv
     
     init(posId: String, tipserEnv: TipserEnv){
@@ -64,16 +63,18 @@ class TipserWebpage {
             }
         }
     }
-    
-    func getCheckoutUrl(posId: String) -> String{
-        let url = self.getBaseUrl() + "/wi/\(posId)/checkout"
-        print(url)
-        return url
-    }
-    
+        
     func goToCheckout(posId: String) -> Void {
         let request = URLRequest(url: URL(string: self.getCheckoutUrl(posId: posId))!)
         webView.load(request)
+    }
+    
+    func isOnCheckout(posId: String) -> Bool{
+        return webView.url?.absoluteURL.absoluteString == getCheckoutUrl(posId: posId)
+    }
+    
+    private func getCheckoutUrl(posId: String) -> String{
+        return self.getBaseUrl() + "/wi/\(posId)/checkout"
     }
     
     private func getHostname() -> String {

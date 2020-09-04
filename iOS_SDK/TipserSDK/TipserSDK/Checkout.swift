@@ -20,16 +20,20 @@ public struct TipserCheckout: UIViewRepresentable{
     }
     
     public func makeUIView(context: Context) -> WKWebView {
-        self.webpage.goToCheckout(posId: self.tipserSDK.getPosId())
-        return self.webpage.webView
+        refreshOrOpenIfNeeded()
+        
+        return webpage.webView
     }
     
     public func updateUIView(_ uiView: WKWebView, context: Context) {
-        let webPage = self.tipserSDK.getTipserWebpage()
-        if (webPage.needRefresh){
-            webPage.needRefresh = false
-            let posId = self.tipserSDK.getPosId();
-            webPage.goToCheckout(posId: posId)
+        refreshOrOpenIfNeeded()
+    }
+    
+    private func refreshOrOpenIfNeeded(){
+        let posId = tipserSDK.getPosId()
+        if (!webpage.isOnCheckout(posId: posId) || tipserSDK.checkoutNeedsRefresh){
+            tipserSDK.checkoutNeedsRefresh = false;
+            webpage.goToCheckout(posId: posId)
         }
     }
 }
