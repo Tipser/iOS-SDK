@@ -14,6 +14,7 @@
 		14072FC7239A65A000E0560E /* TipserSDKTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 14072FC6239A65A000E0560E /* TipserSDKTests.swift */; };
 		14072FC9239A65A000E0560E /* TipserSDK.h in Headers */ = {isa = PBXBuildFile; fileRef = 14072FBB239A65A000E0560E /* TipserSDK.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		14072FE7239A7CE200E0560E /* TipserSDK.swift in Sources */ = {isa = PBXBuildFile; fileRef = 14072FE6239A7CE200E0560E /* TipserSDK.swift */; };
+		E7C8E50B25026C4F0073DFF8 /* TipserEnv.swift in Sources */ = {isa = PBXBuildFile; fileRef = E7C8E50A25026C4F0073DFF8 /* TipserEnv.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -37,6 +38,7 @@
 		14072FC6239A65A000E0560E /* TipserSDKTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TipserSDKTests.swift; sourceTree = "<group>"; };
 		14072FC8239A65A000E0560E /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		14072FE6239A7CE200E0560E /* TipserSDK.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TipserSDK.swift; sourceTree = "<group>"; };
+		E7C8E50A25026C4F0073DFF8 /* TipserEnv.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TipserEnv.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -85,6 +87,7 @@
 				09CC3F52239BC0F40021ED70 /* Checkout.swift */,
 				097BA6DC239C414D00C4D74C /* TipserAPI.swift */,
 				097BA6DE239C416A00C4D74C /* TipserWebpage.swift */,
+				E7C8E50A25026C4F0073DFF8 /* TipserEnv.swift */,
 			);
 			path = TipserSDK;
 			sourceTree = "<group>";
@@ -210,6 +213,7 @@
 			files = (
 				097BA6DF239C416A00C4D74C /* TipserWebpage.swift in Sources */,
 				14072FE7239A7CE200E0560E /* TipserSDK.swift in Sources */,
+				E7C8E50B25026C4F0073DFF8 /* TipserEnv.swift in Sources */,
 				09CC3F53239BC0F40021ED70 /* Checkout.swift in Sources */,
 				097BA6DD239C414D00C4D74C /* TipserAPI.swift in Sources */,
 			);

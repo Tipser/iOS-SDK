@@ -8,20 +8,60 @@
 
 import Foundation
 
-func doGetRequestToTipser(uri: String, onComplete : @escaping (String)->Void, onError : @escaping ()->Void){
-    doRequestToTipser(uri: uri, parameters: nil, tipserToken: nil, method: "GET", onComplete: { data in
-        if let data = data, let dataString = String(data: data, encoding: .utf8) {
-            onComplete(dataString)
-        }
-    }, onError: onError)
+private var tipserEnvToApiHostname = [
+    TipserEnv.prod: "t3-prod-api.tipser.com",
+    TipserEnv.stage: "t3-stage-api.tipser.com",
+    TipserEnv.dev: "t3-dev-api.tipser.com"
+]
+
+struct TipserApi {
+    var tipserEnv: TipserEnv
+    
+    init(tipserEnv: TipserEnv){
+        self.tipserEnv = tipserEnv
+    }
+    
+    func doRequestToApi(uri : String , parameters: [String: Any]? = nil, tipserToken: String? = nil, method: String = "GET", onComplete: ((Data?)->Void)? = nil, onError: (()->Void)? = nil){
+        let urlBase = "https://\(tipserEnvToApiHostname[self.tipserEnv]!)"
+        let url = "\(urlBase)\(uri)"
+        doRequestToTipser(url: url, parameters: parameters, tipserToken: tipserToken, method: method, onComplete: onComplete, onError: onError)
+    }
+    
+    func addProduct(posId: String, productId: String, tipserToken: String, onComplete: (()->Void)? = nil, onError: (()->Void)? = nil){
+        let uri = "/v3/shoppingcart/items"
+        let parameters : [String: Any] = [
+            "productId": productId,
+            "posId": posId,
+            "posArtile": "tipser",
+            "quantity": 1,
+            "posData": "",
+        ]
+        
+        self.doRequestToApi(uri: uri, parameters: parameters, tipserToken: tipserToken, method: "POST", onComplete: { data in
+            onComplete!()
+        }, onError: {
+            onError!()
+        })
+    }
+    
+    func fetchNewToken(onComplete : @escaping (String?)->Void){
+        let uri = "/v3/auth/anonymousToken"
+        self.doRequestToApi(uri: uri, onComplete: { data in
+            if let data = data, let dataString = String(data: data, encoding: .utf8) {
+                let clearTokenValue = dataString.replacingOccurrences(of: "\"", with: "")
+                onComplete(clearTokenValue)
+            }
+        }, onError: {
+            onComplete(nil)
+        })
+    }
 }
     
-func doRequestToTipser(uri : String , parameters: [String: Any]?, tipserToken: String?, method: String?, onComplete: ((Data?)->Void)? = nil, onError: (()->Void)? = nil){
-    let url = URL(string: "https://t3-prod-api.tipser.com" + uri)!
-    var request = URLRequest(url: url)
+private func doRequestToTipser(url : String , parameters: [String: Any]?, tipserToken: String?, method: String, onComplete: ((Data?)->Void)? = nil, onError: (()->Void)? = nil){
+    let properUrl = URL(string: url)
+    var request = URLRequest(url: properUrl!)
     print(request)
     
-    let method = method != nil ? method: "GET"
     request.httpMethod = method
     
     // if parameters are set, assume its JSON content type
@@ -60,4 +100,3 @@ func doRequestToTipser(uri : String , parameters: [String: Any]?, tipserToken: S
     }
     task.resume()
 }
-

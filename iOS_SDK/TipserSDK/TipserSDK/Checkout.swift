@@ -11,18 +11,24 @@ import SwiftUI
 import WebKit
 
 public struct TipserCheckout: UIViewRepresentable{
-    public init(){
+    private var tipserSDK : TipserSDK;
+    private var webpage : TipserWebpage;
+    
+    public init(tipserSDK: TipserSDK){
+        self.tipserSDK = tipserSDK
+        webpage = tipserSDK.getTipserWebpage()
     }
     
     public func makeUIView(context: Context) -> WKWebView {
-        return tipserSDK.getTipserWebpage().webView
+        self.webpage.goToCheckout(posId: self.tipserSDK.getPosId())
+        return self.webpage.webView
     }
     
     public func updateUIView(_ uiView: WKWebView, context: Context) {
-        let webPage = tipserSDK.getTipserWebpage()
+        let webPage = self.tipserSDK.getTipserWebpage()
         if (webPage.needRefresh){
             webPage.needRefresh = false
-            let posId = tipserSDK.getPosId();
+            let posId = self.tipserSDK.getPosId();
             webPage.goToCheckout(posId: posId)
         }
     }

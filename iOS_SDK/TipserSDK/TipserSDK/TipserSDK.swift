@@ -7,14 +7,17 @@ public class TipserSDK {
     var tipserWebpage: TipserWebpage?
     var isAddingProduct = false
     var tipserTokenCache : String?
+    var tipserEnv: TipserEnv;
+    var tipserApi: TipserApi;
     
-    public init() {
+    public init(tipserEnv: TipserEnv = TipserEnv.prod) {
+        self.tipserEnv = tipserEnv
+        self.tipserApi = TipserApi(tipserEnv: tipserEnv)
     }
     
     public func getVersion() -> String {
         return version;
-    }
-    
+    }    
 
     public func getPosId() -> String {
         return posId;
@@ -29,21 +32,14 @@ public class TipserSDK {
             return
         }
         self.isAddingProduct = true
-        let uri = "/v3/shoppingcart/items"
-        let parameters : [String: Any] = [
-            "productId": productId,
-            "posId": getPosId(),
-            "posArtile": "tipser",
-            "quantity": 1,
-            "posData": "",
-        ]
         
-        self.getToken() { tipserToken in
+        
+        self.forceGetToken() { tipserToken in
             if (tipserToken == nil){
                 self.isAddingProduct = false
                 return
             }
-            doRequestToTipser(uri: uri, parameters: parameters, tipserToken: tipserToken, method: "POST", onComplete: { data in
+            self.tipserApi.addProduct(posId: self.posId, productId: productId, tipserToken: tipserToken!, onComplete: {
                 self.isAddingProduct = false
                 self.getTipserWebpage().needRefresh = true;
                 onComplete()
@@ -54,32 +50,32 @@ public class TipserSDK {
         }
     }
     
-    public func getToken(onComplete : @escaping (String?)->Void ) -> Void{
+    public func forceGetToken(onComplete : @escaping (String?)->Void ) -> Void{
         if (self.tipserTokenCache != nil){
             print("Token from cache", self.tipserTokenCache!)
             return onComplete(self.tipserTokenCache)
         }
         
-        self.getTipserWebpage().getToken(){ token in
+        self.getToken(){ token in
             if token != nil{
                 print("Token from webview")
                 return onComplete(token)
             }
             print("Token from webview is nil!")
-                
-            let uri = "/v3/auth/anonymousToken"
-            doGetRequestToTipser(uri: uri, onComplete: { tokenString in
-                let clearTokenValue = tokenString.replacingOccurrences(of: "\"", with: "")
+            self.tipserApi.fetchNewToken(){ newToken in
+                if (newToken == nil){
+                    print("Error: Token could not be fetched")
+                    onComplete(nil)
+                }
                 DispatchQueue.main.async {
-                    self.getTipserWebpage().setToken(token: clearTokenValue){
+                    self.getTipserWebpage().setToken(token: newToken!){
                         print("Token saved in webview")
-//                        self.tipserTokenCache = clearTokenValue;
-                        onComplete(clearTokenValue)
+                        onComplete(newToken)
+                        //self.tipserTokenCache = clearTokenValue;
                     }
                 }
-            }, onError: {
-                onComplete(nil)
-            })
+            }
+            
         }
     }
     
@@ -87,12 +83,16 @@ public class TipserSDK {
         return self.getTipserWebpage().webView
     }
     
+    public func getToken(onComplete: @escaping (String?)->Void) -> Void {
+        self.getTipserWebpage().getToken(){ token in
+            onComplete(token)
+        }
+    }
+    
     func getTipserWebpage() -> TipserWebpage {
         if (self.tipserWebpage == nil){
-            self.tipserWebpage = TipserWebpage(posId: self.getPosId())
+            self.tipserWebpage = TipserWebpage(posId: self.getPosId(), tipserEnv: self.tipserEnv)
         }
         return self.tipserWebpage!
     }
 }
-
-public let tipserSDK = TipserSDK();

@@ -12,6 +12,10 @@ import TipserSDK
 struct ContentView: View{
     @State private var addingProduct = false
     
+    init() {
+        UITableView.appearance().tableHeaderView = UIView(frame: CGRect(x: 0, y: 0, width: 0, height: Double.leastNonzeroMagnitude))
+    }
+    
     var body: some View {    
         return NavigationView{
             VStack(){
@@ -32,13 +36,21 @@ struct ContentView: View{
                     .font(.largeTitle)
                 }.padding(.vertical).disabled(addingProduct)
             }
+            .navigationBarTitle("Shop")        
         }
     }
 }
 
 struct CheckoutView: View {
     var body: some View {
-        TipserCheckout()
+        return VStack(){
+            TipserCheckout(tipserSDK: tipserSDK)
+        }.onAppear {
+            tipserSDK.getToken(){ token in
+                print("Checkout open. Token is \(token)")
+            }
+        }
+        .navigationBarTitle("Checkout", displayMode: .inline)
     }
 }
 
