@@ -15,9 +15,10 @@
 		14072F8B239A656B00E0560E /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 14072F89239A656B00E0560E /* LaunchScreen.storyboard */; };
 		14072F96239A656B00E0560E /* TipserDevAppTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 14072F95239A656B00E0560E /* TipserDevAppTests.swift */; };
 		14072FA1239A656B00E0560E /* TipserDevAppUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 14072FA0239A656B00E0560E /* TipserDevAppUITests.swift */; };
-		5CA4A34E956ED9F682FB0661 /* Pods_TipserDevApp.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 48F48DE51424287A38383845 /* Pods_TipserDevApp.framework */; };
 		7CA87F401AF18496FF57E5FE /* Pods_TipserDevAppTests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D98A9576870D752730BFA19D /* Pods_TipserDevAppTests.framework */; };
 		B2BD80B21B2C0B28FA91BB19 /* Pods_TipserDevApp_TipserDevAppUITests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2FB88BD42506EBE47E76FEF2 /* Pods_TipserDevApp_TipserDevAppUITests.framework */; };
+		E7316C3025063D170034093B /* TipserSDK.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E78B3301250626260090CC71 /* TipserSDK.framework */; };
+		E7316C3125063D170034093B /* TipserSDK.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = E78B3301250626260090CC71 /* TipserSDK.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -58,6 +59,7 @@
 			dstPath = "";
 			dstSubfolderSpec = 10;
 			files = (
+				E7316C3125063D170034093B /* TipserSDK.framework in Embed Frameworks */,
 			);
 			name = "Embed Frameworks";
 			runOnlyForDeploymentPostprocessing = 0;
@@ -84,7 +86,6 @@
 		309D52BD3FB5047C1FBF3232 /* Pods-TipserDevApp.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-TipserDevApp.debug.xcconfig"; path = "Target Support Files/Pods-TipserDevApp/Pods-TipserDevApp.debug.xcconfig"; sourceTree = "<group>"; };
 		30BD3B6B4CD56D975442C214 /* Pods-TipserDevAppTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-TipserDevAppTests.release.xcconfig"; path = "Target Support Files/Pods-TipserDevAppTests/Pods-TipserDevAppTests.release.xcconfig"; sourceTree = "<group>"; };
 		31BAB17F33F56B39F97FDF45 /* Pods-TipserDevAppTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-TipserDevAppTests.debug.xcconfig"; path = "Target Support Files/Pods-TipserDevAppTests/Pods-TipserDevAppTests.debug.xcconfig"; sourceTree = "<group>"; };
-		48F48DE51424287A38383845 /* Pods_TipserDevApp.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_TipserDevApp.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		514F2EF73EB03CC37C03A500 /* Pods-TipserDevApp.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-TipserDevApp.release.xcconfig"; path = "Target Support Files/Pods-TipserDevApp/Pods-TipserDevApp.release.xcconfig"; sourceTree = "<group>"; };
 		53318B1F0D9590B815B1994D /* Pods-TipserDevApp-TipserDevAppUITests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-TipserDevApp-TipserDevAppUITests.debug.xcconfig"; path = "Target Support Files/Pods-TipserDevApp-TipserDevAppUITests/Pods-TipserDevApp-TipserDevAppUITests.debug.xcconfig"; sourceTree = "<group>"; };
 		D98A9576870D752730BFA19D /* Pods_TipserDevAppTests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_TipserDevAppTests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -96,7 +97,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				5CA4A34E956ED9F682FB0661 /* Pods_TipserDevApp.framework in Frameworks */,
+				E7316C3025063D170034093B /* TipserSDK.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -185,7 +186,6 @@
 		14072FE1239A7BCE00E0560E /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
-				48F48DE51424287A38383845 /* Pods_TipserDevApp.framework */,
 				2FB88BD42506EBE47E76FEF2 /* Pods_TipserDevApp_TipserDevAppUITests.framework */,
 				D98A9576870D752730BFA19D /* Pods_TipserDevAppTests.framework */,
 			);
