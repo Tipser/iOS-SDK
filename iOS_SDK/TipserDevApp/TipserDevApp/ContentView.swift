@@ -8,35 +8,65 @@
 
 import SwiftUI
 import TipserSDK
+import NotificationBannerSwift
 
 struct ContentView: View{
     @State private var addingProduct = false
+    @State private var banner : BaseNotificationBanner?;
     
     init() {
         UITableView.appearance().tableHeaderView = UIView(frame: CGRect(x: 0, y: 0, width: 0, height: Double.leastNonzeroMagnitude))
     }
     
+    func showBanner(bannerStyle: BannerStyle, title: String, subtitle: String? = nil){
+        DispatchQueue.main.async {
+            if (self.banner != nil){
+                self.banner?.dismiss()
+            }
+            
+            self.banner = NotificationBanner(title: title, subtitle: subtitle, style: bannerStyle)
+            self.banner!.show(bannerPosition: .bottom)
+        }
+    }
+    
+    func showSuccessBanner(){
+        self.showBanner(bannerStyle: .info, title: "Product added")
+    }
+    
+    func showErrorBanner(){
+        self.showBanner(bannerStyle: .danger, title: "Ups... Something went wrong.", subtitle: "Product couldn't not be added")
+    }
+    
+    func onAddToProductClick(){
+        self.addingProduct = true;
+        tipserSDK.addProduct(productId: "55a65f4878415534087b3903", onComplete: {
+            self.showSuccessBanner();
+            self.addingProduct = false;
+            
+        }, onError: {
+            self.showErrorBanner();
+            self.addingProduct = false;
+        })
+    }
+    
     var body: some View {    
         return NavigationView{
             VStack(){
-                Button(action: {
-                    self.addingProduct = true;
-                    tipserSDK.addProduct(productId: "55a65f4878415534087b3903") { () in
-                        print("UI - Product added!")
-                        self.addingProduct = false;
-                    }
-                }) {
+                Button(action: onAddToProductClick) {
                     Text("Add Product")
                         .font(.largeTitle)
+                    }
+                .padding(.vertical)
+                .disabled(addingProduct)
+                
+                NavigationLink(destination: CheckoutView().onAppear(){
+                    self.banner?.dismiss()
+                }) {
+                    Text("Checkout").font(.largeTitle)
                 }
                 .padding(.vertical)
                 .disabled(addingProduct)
-                NavigationLink(destination: CheckoutView()) {
-                    Text("Checkout")
-                    .font(.largeTitle)
-                }.padding(.vertical).disabled(addingProduct)
-            }
-            .navigationBarTitle("Shop")        
+            }.navigationBarTitle("Shop")
         }
     }
 }

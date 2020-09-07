@@ -9,7 +9,7 @@
 import UIKit
 import TipserSDK
 
-public let tipserSDK = TipserSDK(tipserEnv: TipserEnv.dev);
+public let tipserSDK = TipserSDK(tipserEnv: TipserEnv.prod);
 
 @UIApplicationMain
 class AppDelegate: UIResponder, UIApplicationDelegate {

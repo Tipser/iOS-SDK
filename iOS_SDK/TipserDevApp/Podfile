@@ -1,0 +1,20 @@
+# Uncomment the next line to define a global platform for your project
+ platform :ios, '13.1'
+
+target 'TipserDevApp' do
+  # Comment the next line if you don't want to use dynamic frameworks
+  use_frameworks!
+
+  # Pods for TipserDevApp
+  pod 'NotificationBannerSwift', '~> 3.0.0'
+
+  target 'TipserDevAppTests' do
+    inherit! :search_paths
+    # Pods for testing
+  end
+
+  target 'TipserDevAppUITests' do
+    # Pods for testing
+  end
+
+end

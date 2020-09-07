@@ -21,7 +21,7 @@ struct TipserApi {
         self.tipserEnv = tipserEnv
     }
     
-    func doRequestToApi(uri : String , parameters: [String: Any]? = nil, tipserToken: String? = nil, method: String = "GET", onComplete: ((Data?)->Void)? = nil, onError: (()->Void)? = nil){
+    func doRequestToApi(uri : String , parameters: [String: Any]? = nil, tipserToken: String? = nil, method: String = "GET", onComplete: ((Data?, HTTPURLResponse?)->Void)? = nil, onError: (()->Void)? = nil){
         let urlBase = "https://\(tipserEnvToApiHostname[self.tipserEnv]!)"
         let url = "\(urlBase)\(uri)"
         doRequestToTipser(url: url, parameters: parameters, tipserToken: tipserToken, method: method, onComplete: onComplete, onError: onError)
@@ -37,16 +37,24 @@ struct TipserApi {
             "posData": "",
         ]
         
-        self.doRequestToApi(uri: uri, parameters: parameters, tipserToken: tipserToken, method: "POST", onComplete: { data in
-            onComplete!()
+        self.doRequestToApi(uri: uri, parameters: parameters, tipserToken: tipserToken, method: "POST", onComplete: { (data, urlResponse) in
+            let statusCode : Int = urlResponse?.statusCode ?? 200;
+            let isSuccessStatusCode = statusCode >= 200 && statusCode < 400
+            if (onComplete != nil && isSuccessStatusCode){
+                onComplete!()
+            }else if (onError != nil && !isSuccessStatusCode){
+                onError!()
+            }
         }, onError: {
-            onError!()
+            if (onError != nil){
+                onError!();
+            }
         })
     }
     
     func fetchNewToken(onComplete : @escaping (String?)->Void){
         let uri = "/v3/auth/anonymousToken"
-        self.doRequestToApi(uri: uri, onComplete: { data in
+        self.doRequestToApi(uri: uri, onComplete: { (data, urlResponse) in
             if let data = data, let dataString = String(data: data, encoding: .utf8) {
                 let clearTokenValue = dataString.replacingOccurrences(of: "\"", with: "")
                 onComplete(clearTokenValue)
@@ -57,7 +65,7 @@ struct TipserApi {
     }
 }
     
-private func doRequestToTipser(url : String , parameters: [String: Any]?, tipserToken: String?, method: String, onComplete: ((Data?)->Void)? = nil, onError: (()->Void)? = nil){
+private func doRequestToTipser(url : String , parameters: [String: Any]?, tipserToken: String?, method: String, onComplete: ((Data?, HTTPURLResponse?)->Void)? = nil, onError: (()->Void)? = nil){
     let properUrl = URL(string: url)
     var request = URLRequest(url: properUrl!)
     print(request)
@@ -94,7 +102,7 @@ private func doRequestToTipser(url : String , parameters: [String: Any]?, tipser
                 print("data: \(dataString)")
             }
             if let onComplete = onComplete{
-                onComplete(data)
+                onComplete(data, response as? HTTPURLResponse)
             }
         }
     }

@@ -28,7 +28,7 @@ public class TipserSDK {
         self.posId = posId;
     }
     
-    public func addProduct(productId: String, onComplete : @escaping ()->Void ){
+    public func addProduct(productId: String, onComplete : @escaping ()->Void, onError: (()->Void)?){
         if (self.isAddingProduct){
             return
         }
@@ -46,7 +46,9 @@ public class TipserSDK {
                 onComplete()
             }, onError: {
                 self.isAddingProduct = false
-                onComplete()
+                if (onError != nil){
+                    onError!()
+                }
             })
         }
     }
