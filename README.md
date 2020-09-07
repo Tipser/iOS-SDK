@@ -11,4 +11,4 @@ User is able to add a product, navigate to checkout page to see a cart with the 
 
 ## Screenshots
 
-
+![Example of app](https://tipser.github.io/iOS-SDK/assets/example.gif)
