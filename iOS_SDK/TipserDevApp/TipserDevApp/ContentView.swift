@@ -13,6 +13,7 @@ import NotificationBannerSwift
 struct ContentView: View{
     @State private var addingProduct = false
     @State private var banner : BaseNotificationBanner?;
+    @State private var numberOfProducts : Int = 0;
     
     init() {
         UITableView.appearance().tableHeaderView = UIView(frame: CGRect(x: 0, y: 0, width: 0, height: Double.leastNonzeroMagnitude))
@@ -40,12 +41,20 @@ struct ContentView: View{
     func onAddToProductClick(){
         self.addingProduct = true;
         tipserSDK.addProduct(productId: "55a65f4878415534087b3903", onComplete: {
-            self.showSuccessBanner();
             self.addingProduct = false;
-            
+            self.showSuccessBanner();
+            self.fetchShoppingCart();
         }, onError: {
             self.showErrorBanner();
             self.addingProduct = false;
+        })
+    }
+    
+    func fetchShoppingCart(){
+        tipserSDK.fetchShoppingCart(onComplete: { shoppingCart in
+            self.numberOfProducts = shoppingCart.numberOfProducts
+        }, onError: {
+            print("fetching shopping cart failed")
         })
     }
     
@@ -66,7 +75,13 @@ struct ContentView: View{
                 }
                 .padding(.vertical)
                 .disabled(addingProduct)
-            }.navigationBarTitle("Shop")
+                
+                Text("Products in cart: \(self.numberOfProducts)").font(.footnote)
+            }
+            .navigationBarTitle("Shop")
+            .onAppear(){
+                self.fetchShoppingCart();
+            }
         }
     }
 }

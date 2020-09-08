@@ -52,6 +52,33 @@ struct TipserApi {
         })
     }
     
+    func fetchShoppingCart(tipserToken: String, onComplete: (@escaping (ShoppingCart)->Void), onError: (()->Void)? = nil){
+        let uri = "/v3/shoppingcart"
+        self.doRequestToApi(uri: uri, tipserToken: tipserToken, method: "GET", onComplete: { (data, urlResponse) in
+            let statusCode : Int = urlResponse?.statusCode ?? 200;
+            let isSuccessStatusCode = statusCode >= 200 && statusCode < 400
+            if (isSuccessStatusCode && data != nil){
+                do {
+                    let shoppingCart = try JSONDecoder().decode(ShoppingCart.self, from: data!)
+                    onComplete(shoppingCart)
+                } catch let error {
+                    print(error);
+                    if let onError = onError {
+                        onError();
+                    }
+                }
+            }else {
+                if let onError = onError {
+                    onError();
+                }
+            }
+        }, onError: {
+            if let onError = onError {
+                onError();
+            }
+        })
+    }
+    
     func fetchNewToken(onComplete : @escaping (String?)->Void){
         let uri = "/v3/auth/anonymousToken"
         self.doRequestToApi(uri: uri, onComplete: { (data, urlResponse) in
@@ -63,6 +90,10 @@ struct TipserApi {
             onComplete(nil)
         })
     }
+}
+
+public struct ShoppingCart : Codable {
+    public let numberOfProducts: Int
 }
     
 private func doRequestToTipser(url : String , parameters: [String: Any]?, tipserToken: String?, method: String, onComplete: ((Data?, HTTPURLResponse?)->Void)? = nil, onError: (()->Void)? = nil){

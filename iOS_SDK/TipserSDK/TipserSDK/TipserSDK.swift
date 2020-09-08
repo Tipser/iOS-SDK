@@ -53,6 +53,15 @@ public class TipserSDK {
         }
     }
     
+    public func fetchShoppingCart(onComplete : @escaping (ShoppingCart)->Void, onError: (()->Void)?){
+        self.forceGetToken() { tipserToken in
+            if (tipserToken == nil && onError != nil){
+                onError!();
+            }
+            self.tipserApi.fetchShoppingCart(tipserToken: tipserToken!, onComplete: onComplete)
+        };
+    }
+    
     public func forceGetToken(onComplete : @escaping (String?)->Void ) -> Void{
         if (self.tipserTokenCache != nil){
             print("Token from cache", self.tipserTokenCache!)
